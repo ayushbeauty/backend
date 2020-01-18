@@ -1,0 +1,26 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "Ayush beauty parlour application service",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ayushbeauty/backend.git"
+	},
+	"author": "Sivachandran",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ayushbeauty/backend/issues"
+	},
+	"homepage": "https://github.com/ayushbeauty/backend#readme",
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"express": "^4.17.1",
+		"mongoose": "^5.8.9",
+		"nodemon": "^2.0.2"
+	}
+}
