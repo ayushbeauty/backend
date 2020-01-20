@@ -1,7 +1,9 @@
+const { groupBy } = require('lodash');
+
 const Service = require('./../models/service');
 
-exports.addService = ({ body: { title, amount } }, res, next) => {
-	const serviceIns = new Service({ title, amount });
+exports.addService = ({ body: { title, amount, category } }, res, next) => {
+	const serviceIns = new Service({ title, amount, category });
 	serviceIns
 		.save()
 		.then((result) => {
@@ -11,7 +13,7 @@ exports.addService = ({ body: { title, amount } }, res, next) => {
 };
 
 exports.getAllServices = (req, res, next) => {
-	Service.find().then((result) => {
-		res.json(result);
+	Service.find().populate({ path: 'category' }).then((result) => {
+		res.json(groupBy(result, 'category.name'));
 	});
 };

@@ -6,6 +6,9 @@ const serviceSchema = new mongoose.Schema({
 		unique: true,
 		required: true
 	},
+	description: {
+		type: String
+	},
 	amount: {
 		type: Number,
 		required: true

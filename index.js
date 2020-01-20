@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const invoiceRoutes = require('./src/routes/invoice');
 const serviceRoutes = require('./src/routes/service');
 const categoryRoutes = require('./src/routes/category');
+const customerRoutes = require('./src/routes/customer');
 
 const app = express();
 
@@ -27,6 +28,8 @@ mongoose
 app.get('/', (req, res) => {
 	res.json('Working');
 });
+
+app.use('/customer', customerRoutes);
 
 app.use('/category', categoryRoutes);
 
