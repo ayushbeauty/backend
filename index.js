@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const invoiceRoutes = require('./src/routes/invoice');
 const serviceRoutes = require('./src/routes/service');
@@ -24,6 +25,8 @@ mongoose
 	.catch((err) => {
 		console.log(err);
 	});
+
+app.use(cors());
 
 app.get('/', (req, res) => {
 	res.json('Working');
