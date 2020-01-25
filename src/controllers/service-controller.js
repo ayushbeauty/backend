@@ -7,7 +7,7 @@ exports.addService = ({ body: { title, amount, category } }, res, next) => {
 	serviceIns
 		.save()
 		.then((result) => {
-			res.send('Service added');
+			res.json(result);
 		})
 		.catch((err) => console.log(err));
 };

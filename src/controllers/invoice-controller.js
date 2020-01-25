@@ -8,7 +8,7 @@ exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => 
 			invoiceIns
 				.save()
 				.then((result) => {
-					res.json('Done');
+					res.json(result);
 				})
 				.catch((err) => {
 					res.send(err);
@@ -20,7 +20,7 @@ exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => 
 				invoiceIns
 					.save()
 					.then((result) => {
-						res.json('Done');
+						res.json(result);
 					})
 					.catch((err) => {
 						res.send(err);
@@ -28,6 +28,16 @@ exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => 
 			});
 		}
 	}).catch((err) => console.log(err));
+};
+
+exports.getInvoice = (req, res, next) => {
+	let { id } = req.params;
+	Invoice.find({ _id: id })
+		.populate({ path: 'customerId' })
+		.populate({ path: 'services.serviceId' })
+		.exec((err, result) => {
+			res.json(result[0]);
+		});
 };
 
 exports.getInvoices = (req, res, next) => {

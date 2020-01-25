@@ -14,7 +14,11 @@ const serviceSchema = new mongoose.Schema(
 
 const invoiceSchema = new mongoose.Schema({
 	services: [ serviceSchema ],
-	customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'customer', required: true }
+	customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'customer', required: true },
+	isPaid: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('invoice', invoiceSchema);
