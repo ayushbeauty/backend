@@ -12,13 +12,16 @@ const serviceSchema = new mongoose.Schema(
 	{ _id: false }
 );
 
-const invoiceSchema = new mongoose.Schema({
-	services: [ serviceSchema ],
-	customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'customer', required: true },
-	isPaid: {
-		type: Boolean,
-		default: false
-	}
-});
+const invoiceSchema = new mongoose.Schema(
+	{
+		services: [ serviceSchema ],
+		customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'customer', required: true },
+		isPaid: {
+			type: Boolean,
+			default: false
+		}
+	},
+	{ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 module.exports = mongoose.model('invoice', invoiceSchema);

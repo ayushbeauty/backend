@@ -2,6 +2,7 @@ const Invoice = require('../models/invoice');
 const Customer = require('../models/customer');
 
 exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => {
+	// Checks if the user is already exists
 	Customer.find({ mobileNumber }, (err, doc) => {
 		if (doc.length == 1) {
 			const invoiceIns = new Invoice({ customerId: doc[0]._id, services });
@@ -14,6 +15,7 @@ exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => 
 					res.send(err);
 				});
 		} else {
+			name = name.charAt(0).toUpperCase() + name.slice(1);
 			const customerIns = new Customer({ name, mobileNumber });
 			customerIns.save().then((result) => {
 				const invoiceIns = new Invoice({ customerId: result._id, services });
@@ -35,6 +37,7 @@ exports.getInvoice = (req, res, next) => {
 	Invoice.find({ _id: id })
 		.populate({ path: 'customerId' })
 		.populate({ path: 'services.serviceId' })
+		.populate({ path: 'services.serviceId.category' })
 		.exec((err, result) => {
 			res.json(result[0]);
 		});
