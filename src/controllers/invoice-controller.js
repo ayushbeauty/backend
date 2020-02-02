@@ -36,15 +36,31 @@ exports.getInvoice = (req, res, next) => {
 	let { id } = req.params;
 	Invoice.find({ _id: id })
 		.populate({ path: 'customerId' })
-		.populate({ path: 'services.serviceId' })
-		.populate({ path: 'services.serviceId.category' })
+		.populate({
+			path: 'services.serviceId',
+			model: 'service',
+			populate: {
+				path: 'category',
+				model: 'category'
+			}
+		})
 		.exec((err, result) => {
 			res.json(result[0]);
 		});
 };
 
 exports.getInvoices = (req, res, next) => {
-	Invoice.find().populate({ path: 'customerId' }).populate({ path: 'services.serviceId' }).exec((err, result) => {
-		res.json(result);
-	});
+	Invoice.find()
+		.populate({ path: 'customerId' })
+		.populate({
+			path: 'services.serviceId',
+			model: 'service',
+			populate: {
+				path: 'category',
+				model: 'category'
+			}
+		})
+		.exec((err, result) => {
+			res.json(result);
+		});
 };
