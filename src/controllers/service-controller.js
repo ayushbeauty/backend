@@ -17,3 +17,7 @@ exports.getAllServices = (req, res, next) => {
 		res.json(groupBy(result, 'category.name'));
 	});
 };
+
+exports.updateService = ({ body }, res, next) => {
+	Service.update({ _id: body._id }, body).then(() => res.json('Updated')).catch((err) => res.send(err));
+};

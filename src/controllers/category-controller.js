@@ -12,3 +12,7 @@ exports.getAllCategories = (req, res, next) => {
 		res.json(result);
 	});
 };
+
+exports.updateCategory = ({ body }, res, next) => {
+	Category.update({ _id: body._id }, body).then(() => res.json('Updated')).catch((err) => res.send(err));
+};

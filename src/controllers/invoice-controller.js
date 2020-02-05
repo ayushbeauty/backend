@@ -1,6 +1,8 @@
 const Invoice = require('../models/invoice');
 const Customer = require('../models/customer');
 
+const _ = require('lodash');
+
 exports.addInvoice = ({ body: { name, mobileNumber, services } }, res, next) => {
 	// Checks if the user is already exists
 	Customer.find({ mobileNumber }, (err, doc) => {
@@ -62,5 +64,22 @@ exports.getInvoices = (req, res, next) => {
 		})
 		.exec((err, result) => {
 			res.json(result);
+		});
+};
+
+exports.getInvoiceInsights = (req, res, next) => {
+	Invoice.find()
+		.populate({
+			path: 'services.serviceId',
+			model: 'service'
+		})
+		.exec((err, result) => {
+			let total = 0;
+			_.map(result, ({ services }) => {
+				_.map(services, ({ quantity, serviceId: { amount } }) => {
+					total += quantity * amount;
+				});
+			});
+			res.json({ total });
 		});
 };
