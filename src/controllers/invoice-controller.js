@@ -1,5 +1,6 @@
 const Invoice = require('../models/invoice');
 const Customer = require('../models/customer');
+const moment = require('moment');
 
 const _ = require('lodash');
 
@@ -47,7 +48,8 @@ exports.getInvoice = (req, res, next) => {
 			}
 		})
 		.exec((err, result) => {
-			res.json(result[0]);
+			let invoice = result[0];
+			res.json({ ...invoice._doc, total: getTotal(result) });
 		});
 };
 
@@ -67,6 +69,16 @@ exports.getInvoices = (req, res, next) => {
 		});
 };
 
+const getTotal = (collection) => {
+	let total = 0;
+	_.map(collection, ({ services }) => {
+		_.map(services, ({ quantity, serviceId: { amount } }) => {
+			total += quantity * amount;
+		});
+	});
+	return total;
+};
+
 exports.getInvoiceInsights = (req, res, next) => {
 	Invoice.find()
 		.populate({
@@ -74,12 +86,31 @@ exports.getInvoiceInsights = (req, res, next) => {
 			model: 'service'
 		})
 		.exec((err, result) => {
-			let total = 0;
-			_.map(result, ({ services }) => {
-				_.map(services, ({ quantity, serviceId: { amount } }) => {
-					total += quantity * amount;
+			let response = {
+					monthly: [],
+					yearly: [],
+					total: 0
+				},
+				total = getTotal(result),
+				monthly = _.groupBy(result, ({ created_at }) => {
+					return moment(created_at).format('MMM, YYYY');
+				}),
+				yearly = _.groupBy(result, ({ created_at }) => {
+					return moment(created_at).format('YYYY');
+				});
+			_.map(monthly, (value, key) => {
+				response.monthly.push({
+					month: key,
+					total: getTotal(value)
 				});
 			});
-			res.json({ total });
+			_.map(yearly, (value, key) => {
+				response.yearly.push({
+					year: key,
+					total: getTotal(value)
+				});
+			});
+			response.total = total;
+			res.json(response);
 		});
 };

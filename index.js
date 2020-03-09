@@ -20,6 +20,7 @@ mongoose
 		useUnifiedTopology: true
 	})
 	.then((result) => {
+		app.listen(8000);
 		console.log('Connected');
 	})
 	.catch((err) => {
@@ -39,5 +40,3 @@ app.use('/category', categoryRoutes);
 app.use('/service', serviceRoutes);
 
 app.use('/invoice', invoiceRoutes);
-
-app.listen(8000);
